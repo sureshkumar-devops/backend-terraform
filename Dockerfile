@@ -17,8 +17,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Create non-root user for security
-RUN useradd -m appuser && chown -R appuser:appuser /app
-USER appuser
+#RUN useradd -m ubuntu && chown -R ubuntu:ubuntu /app
+
+RUN useradd -m -s /bin/bash ubuntu \
+    && echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
+    && chown -R ubuntu:ubuntu /app
+
+# Switch to non-root user
+USER ubuntu
 
 # Expose the correct port
 EXPOSE 8080
